@@ -1,4 +1,9 @@
-python-chatui
+kwak_cli
 =============
 
-A curses-based simple chat user interface.  Provides an abstraction for a userlist, message buffer, and message entry
+A curses-based simple [kwak.io](https://kwak.io) user interface.
+
+## Commands available
+
+- /quit
+- /join <channel>
