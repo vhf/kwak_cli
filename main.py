@@ -1,13 +1,13 @@
 from curses import wrapper
 from ui import ChatUI
 from client import Client
-import ConfigParser
+import configparser
 
 def main(stdscr):
-    cp = ConfigParser.ConfigParser()
+    cp = configparser.ConfigParser()
     cp.read('config.cfg')
     username = cp.get('credentials', 'username')
-    password = cp.get('credentials', 'password')
+    password = cp.get('credentials', 'password').encode('utf-8')
 
     stdscr.clear()
     ui = ChatUI(stdscr)
