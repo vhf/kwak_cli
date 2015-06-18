@@ -9,9 +9,11 @@ class Client:
         self.username = username
         self.password = password
         self.ui = ui
+        self.resume_token = ''
         self.client = MeteorClient('wss://kwak.io/websocket')
         self.client.connect()
-        self.client.login(self.username, self.password, callback=self.logged_in)
+        self.client.login(self.username, self.password,
+            token=self.resume_token, callback=self.logged_in)
 
 
         self.hot_channels = []
@@ -38,7 +40,7 @@ class Client:
         self.client.subscribe('messages', [self.current_channel])
 
     def subscribe_to_users(self):
-        self.client.subscribe('users')
+        self.client.subscribe('users', {'profile.online': True})
 
     def added(self, collection, id, fields):
         if collection == 'messages':
@@ -54,4 +56,5 @@ class Client:
         if error:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))
         else:
+            self.resume_token = data['token']
             self.ui.chatbuffer_add('* LOGGED IN')
