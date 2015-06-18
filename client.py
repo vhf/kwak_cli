@@ -9,7 +9,7 @@ class Client:
         self.username = username
         self.password = password
         self.ui = ui
-        self.client = MeteorClient('ws://127.0.0.1:3000/websocket')
+        self.client = MeteorClient('wss://kwak.io/websocket')
         self.client.connect()
         self.client.login(self.username, self.password, callback=self.logged_in)
 
@@ -42,8 +42,7 @@ class Client:
 
     def added(self, collection, id, fields):
         if collection == 'messages':
-            pass
-            # self.ui.chatbuffer_add(fields['text'])
+            self.ui.chatbuffer_add(fields['text'])
         elif collection == 'users':
             self.ui.userlist.append(fields['username'])
             self.ui.redraw_userlist()
