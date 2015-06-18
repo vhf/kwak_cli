@@ -1,5 +1,6 @@
 from pprint import pprint
-from time import sleep
+from time import sleep, mktime
+from datetime import datetime
 
 from MeteorClient import MeteorClient
 
@@ -9,12 +10,12 @@ class Client:
         self.username = username
         self.password = password
         self.ui = ui
+        self.now = mktime(datetime.now().timetuple())*1e3
         self.resume_token = ''
         self.client = MeteorClient('wss://kwak.io/websocket')
         self.client.connect()
         self.client.login(self.username, self.password,
             token=self.resume_token, callback=self.logged_in)
-
 
         self.hot_channels = []
         self.hot_channels_name = []
@@ -43,8 +44,9 @@ class Client:
         self.client.subscribe('users', {'profile.online': True})
 
     def added(self, collection, id, fields):
-        if collection == 'messages':
-            self.ui.chatbuffer_add(fields['text'])
+                                        # only add new messages, not backlog
+        if collection == 'messages' and fields['time'] > self.now:
+            self.ui.chatbuffer_add('{}\t{}'.format(fields['time'], fields['text']))
         elif collection == 'users':
             self.ui.userlist.append(fields['username'])
             self.ui.redraw_userlist()

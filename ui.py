@@ -117,7 +117,7 @@ class ChatUI:
         """
 
         Wait for the user to input a message and hit enter.
-        Returns the message
+        Puts the message into self.inputbuffer
 
         """
         self.inputbuffer = prompt
@@ -137,6 +137,6 @@ class ChatUI:
                     self.inputbuffer = self.inputbuffer[:-1]
             elif last == curses.KEY_RESIZE:
                 self.resize()
-            elif 32 <= last <= 126:
+            else:
                 self.inputbuffer += chr(last)
             self.redraw_chatline()
