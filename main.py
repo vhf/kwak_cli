@@ -21,6 +21,9 @@ def main(stdscr):
         message = ui.wait_input()
         if message[0:6] == '/join ':
             client.subscribe_to_channel(message[6:])
+        elif message[0:4] == '/hot':
+            ui.chatbuffer_add(', '.join(client.hot_channels_name))
+            client.client.call('getHotChannels', [], client.set_hot_channels_name)
         elif message != '/quit':
             client.client.insert('messages', {'channel': client.current_channel, 'text': message})
 
