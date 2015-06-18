@@ -138,5 +138,6 @@ class ChatUI:
             elif last == curses.KEY_RESIZE:
                 self.resize()
             else:
-                self.inputbuffer += chr(last)
+                curses.ungetch(last)
+                self.inputbuffer += self.stdscr.get_wch()
             self.redraw_chatline()
