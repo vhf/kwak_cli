@@ -15,6 +15,7 @@ class Client:
 
         self.hot_channels = []
         self.hot_channels_name = []
+        self.current_channel = 'main'
         self.client.call('getHotChannels', [], self.set_hot_channels_name)
 
         self.client.on('added', self.added)
@@ -25,13 +26,14 @@ class Client:
             return
         self.hot_channels_name = result
 
-    def subscribe_to_channel(self, channel='main'):
+    def subscribe_to_channel(self, channel):
+        self.current_channel = channel
         try:
             self.client.unsubscribe('messages')
         except:
             pass
         self.ui.chatbuffer_add('* LISTENING TO CHANNEL {}'.format(channel))
-        self.client.subscribe('messages', [channel])
+        self.client.subscribe('messages', [self.current_channel])
 
     def subscribe_to_users(self):
         self.client.subscribe('users')

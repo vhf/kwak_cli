@@ -22,6 +22,7 @@ def main(stdscr):
         if message[0:6] == '/join ':
             client.subscribe_to_channel(message[6:])
         else:
+            client.client.insert('messages', {'channel': client.current_channel, 'text': message})
             ui.chatbuffer_add(message)
 
 wrapper(main)
