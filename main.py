@@ -21,7 +21,7 @@ def main(stdscr):
         message = ui.wait_input()
         if message[0:6] == '/join ':
             client.subscribe_to_channel(message[6:])
-        else:
+        elif message != '/quit':
             client.client.insert('messages', {'channel': client.current_channel, 'text': message})
 
 wrapper(main)
