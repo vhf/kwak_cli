@@ -16,7 +16,7 @@ class ChatUI:
         self.win_userlist = stdscr.derwin(*userlist_hwyx)
         self.win_chatline = stdscr.derwin(*chatline_yx)
         self.win_chatbuffer = stdscr.derwin(*chatbuffer_hwyx)
-
+        
         self.redraw_ui()
 
     def resize(self):
@@ -135,6 +135,8 @@ class ChatUI:
             elif last == curses.KEY_BACKSPACE or last == 127:
                 if len(self.inputbuffer) > len(prompt):
                     self.inputbuffer = self.inputbuffer[:-1]
+            elif last == curses.KEY_LEFT or last == curses.KEY_UP or last == curses.KEY_DOWN or last == curses.KEY_RIGHT:                
+                self.intputbuffer = "/dbg"
             elif last == curses.KEY_RESIZE:
                 self.resize()
             else:
