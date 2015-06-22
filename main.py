@@ -2,6 +2,7 @@ from curses import wrapper
 from ui import ChatUI
 from client import Client
 import configparser
+import time
 
 def main(stdscr):
     cp = configparser.ConfigParser()
@@ -13,8 +14,8 @@ def main(stdscr):
     ui = ChatUI(stdscr)
 
     client = Client(username, password, ui)
-    client.subscribe_to_channel('main')
-    client.subscribe_to_users()
+    client.subscribe_to_channel('dev')
+    client.subscribe_to_users('dev')
 
     message = ''
     while message != '/quit':
@@ -24,7 +25,12 @@ def main(stdscr):
         elif message[0:4] == '/hot':
             ui.chatbuffer_add(', '.join(client.hot_channels_name))
             client.client.call('getHotChannels', [], client.set_hot_channels_name)
+        elif message[0:4] == '/dbg':
+                client.ui.redraw_userlist()
+                client.ui.chatbuffer_add(str(client.ui.userlist))
         elif message != '/quit':
             client.client.insert('messages', {'channel': client.current_channel, 'text': message})
 
+    client.logout()
+    time.sleep(3)
 wrapper(main)
