@@ -53,7 +53,6 @@ class Client:
             if len(fields['profile']) > 0 and bool(fields['profile']['online']) == True:
                 self.ui.userlist.append(fields['username'])
                 self.ui.redraw_userlist()
-            
 
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
@@ -63,7 +62,8 @@ class Client:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))
         else:
             self.resume_token = data['token']
+            self.client.call('setOnline', [])
             self.ui.chatbuffer_add('* LOGGED IN')
-
+            
     def logout(self):
         self.ui.chatbuffer_add('* BYE (LOVELY DUCK)')

@@ -28,6 +28,7 @@ def main(stdscr):
         elif message[0:4] == '/dbg':
                 client.ui.redraw_userlist()
                 client.ui.chatbuffer_add(str(client.ui.userlist))
+                client.client.call('setOnline', [])
         elif message != '/quit':
             client.client.insert('messages', {'channel': client.current_channel, 'text': message})
 
