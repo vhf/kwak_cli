@@ -19,8 +19,10 @@ class Client:
 
         self.hot_channels = []
         self.hot_channels_name = []
+        self.all_channels_name = []
         self.current_channel = 'dev'
         self.client.call('getHotChannels', [], self.set_hot_channels_name)
+        self.client.call('channelList', [], self.set_all_channels_name)
 
         self.client.on('connected', self.connected)
         self.client.on('added', self.added)
@@ -30,6 +32,12 @@ class Client:
             self.ui.chatbuffer_add(error)
             return
         self.hot_channels_name = result
+
+    def set_all_channels_name(self, error, result):
+        if error:
+            self.ui.chatbuffer_add(error)
+            return
+        self.all_channels_name = result
 
     def subscribe_to_channel(self, channel):
         self.current_channel = channel
