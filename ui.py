@@ -22,12 +22,6 @@ class ChatUI:
             'chatbody': [ termY -((1 +padd_ui)+(1+padd_ui)+padd_ui), termX -((18+padd_lt)+(18+padd_lt)+(padd_ui*2)), 3, (18 +padd_lt) +padd_ui],
             'chatline': [ 1, termX, termY -1, 0]
         }
-        coordsBox_channels = ( termY -2, 10, 0, 0        )
-        coordsBox_users    = ( termY -2 -3, 10, 2 +1, termX -10)
-        coordsBox_chatHead = ( 2, termX -10 -1, 0, 10 +1)
-        coordsBox_chatbuffer = ( termY -1 -2 -2, termX -11 -10 -1, 3, 10+1)
-        coordsBox_chatline  = ( 1, termX, termY -1, 0)
-            
         # define box
         self.box_channels = stdscr.derwin(*self.coordsBox['channel'])
         self.box_users    = stdscr.derwin(*self.coordsBox['user'])
