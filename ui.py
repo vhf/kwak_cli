@@ -101,8 +101,6 @@ class ChatUI:
         boxSzY, boxSzX = self.box_channels.getmaxyx()
         boxCrY, boxCrX = self.box_channels.getparyx()
         self.stdscr.vline( boxCrY, boxCrX +boxSzX, "|", boxSzY)
-        self.chatbuffer_add("COOR_X: " + str(boxCrX))
-        self.chatbuffer_add("SIZE_X: " + str(boxSzX))
         # box users
         boxSzY, boxSzX = self.box_users.getmaxyx()
         boxCrY, boxCrX = self.box_users.getparyx()
@@ -115,7 +113,6 @@ class ChatUI:
         # box chatbuffer
         boxSzY, boxSzX = self.box_chatbuffer.getmaxyx()
         boxCrY, boxCrX = self.box_chatbuffer.getparyx()
-        self.chatbuffer_add("X: " + str(boxSzX))
         # box message
         boxSzY, boxSzX = self.box_chatline.getmaxyx()
         boxCrY, boxCrX = self.box_chatline.getparyx()
