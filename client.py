@@ -19,8 +19,10 @@ class Client:
 
         self.hot_channels = []
         self.hot_channels_name = []
-        self.current_channel = 'dev'
+        self.all_channels_name = []
+        self.current_channel = 'main'
         self.client.call('getHotChannels', [], self.set_hot_channels_name)
+        self.client.call('channelList', [], self.set_all_channels_name)
 
         self.client.on('connected', self.connected)
         self.client.on('added', self.added)
@@ -31,6 +33,13 @@ class Client:
             return
         self.hot_channels_name = result
 
+    def set_all_channels_name(self, error, result):
+        if error:
+            self.ui.chatbuffer_add(error)
+            return
+        self.all_channels_name = result
+        self.ui.chanlist = self.all_channels_name
+
     def subscribe_to_channel(self, channel):
         self.current_channel = channel
         try:
@@ -38,6 +47,7 @@ class Client:
         except:
             pass
         self.ui.chatbuffer_add('* LISTENING TO CHANNEL {}'.format(channel))
+        self.ui.redraw_chathead(channel)
         self.client.subscribe('messages', [self.current_channel])
 
     def subscribe_to_users(self, channel):
@@ -47,7 +57,9 @@ class Client:
         # only add new messages, not backlog
         if collection == 'messages' and fields['time'] > self.now:
             # fields : channel | time | text | user
-            self.ui.chatbuffer_add('{}\t{}: {}'.format(fields['time'], fields['user'], fields['text']))
+            hStamp = int(fields['time']) // 1000
+            hStamp = datetime.fromtimestamp(hStamp).strftime('%H:%M')
+            self.ui.chatbuffer_add('{} {}: {}'.format(hStamp, fields['user'], fields['text']))
         elif collection == 'users':
             # fields : username | profile | color
             if len(fields['profile']) > 0 and bool(fields['profile']['online']) == True:
@@ -56,7 +68,7 @@ class Client:
 
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
-
+        
     def logged_in(self, error, data):
         if error:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))
@@ -64,6 +76,7 @@ class Client:
             self.resume_token = data['token']
             self.client.call('setOnline', [])
             self.ui.chatbuffer_add('* LOGGED IN')
+            # add self.username in userlist when logged and fix duplicates names
             
     def logout(self):
         self.ui.chatbuffer_add('* BYE (LOVELY DUCK)')
