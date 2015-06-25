@@ -4,11 +4,11 @@ class ChatUI:
     def __init__(self, stdscr, userlist_width=16):
         self.stdscr = stdscr
         self.userlist = []
+        self.chanlist = []
         self.inputbuffer = ""
         self.current_channel = None
         self.linebuffer = []
         self.chatbuffer = []
-        self.chanlist = [' ABCDEFGHIJKLMNOPQR ', 'main']
 
         # Curses, why must you confuse me with your height, width, y, x
         termY, termX = stdscr.getmaxyx()
@@ -34,10 +34,9 @@ class ChatUI:
     def resize(self):
         termY, termX = self.stdscr.getmaxyx()
         padd_ui = 1
-        padd_lt = 2
-        
+        padd_lt = 2        
         # h, w , y, x
-        """ Recalcul all boxes """
+        """ Recalc all boxes """
         # box chathead
         boxChannelSzY, boxChannelSzX = self.box_channels.getmaxyx()
         boxChannelCrY, boxChannelCrX = self.box_channels.getparyx()
@@ -153,9 +152,11 @@ class ChatUI:
         i = 1
         if (channel == None and self.current_channel == None):
             self.box_chatHead.addstr(0, 0, "Type \"/join ChannelName\" to start chatting !")
-        else:
+        elif (channel != None):
             self.current_channel = channel
-            self.box_chatHead.addstr(0, 0, " #" + channel)
+            self.box_chatHead.addstr(0, 0, " #" + str(channel))
+        else:
+            self.box_chatHead.addstr(0, 0, " #" + str(self.current_channel))
         self.box_chatHead.addstr(0, w -(6 +1), "[HIDE]")
         self.box_chatHead.refresh()
 
@@ -167,7 +168,7 @@ class ChatUI:
         for i, name in enumerate(self.chanlist):
             if i >= h:
                 break
-            self.box_channels.addstr(i, 0, name)
+            self.box_channels.addstr(i, 0, " #" + name)
         self.box_channels.refresh()
 
     def redraw_chatline(self):

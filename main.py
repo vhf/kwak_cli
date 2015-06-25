@@ -25,13 +25,14 @@ def main(stdscr):
         elif message[0:4] == '/hot':
             ui.chatbuffer_add(', '.join(client.hot_channels_name))
             client.client.call('getHotChannels', [], client.set_hot_channels_name)
-        elif message[0:4] == '/dbg':
-            client.ui.redraw_userlist()
-            client.ui.chatbuffer_add(str(client.ui.userlist))
-            client.client.call('setOnline', [])
+        elif message[0:4] == '/dbg': # Usefull ;)
+            ui.redraw_userlist()
+            ui.chatbuffer_add(str(client.ui.userlist))
+            client.client.call('setOnline', [])    
         elif message[0:5] == '/list':
             ui.chatbuffer_add(', '.join(client.all_channels_name));
             client.client.call('channelList', [], client.set_all_channels_name)
+            ui.redraw_ui()
         elif message != '/quit':
             client.client.insert('messages', {'channel': client.current_channel, 'text': message})
 
