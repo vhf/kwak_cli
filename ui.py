@@ -186,7 +186,7 @@ class ChatUI:
         for i, name in enumerate(self.userlist):
             if i >= h:
                 break
-            self.box_users.addstr(i, 1, "-" +name[:w - 1])
+            self.box_users.addstr(i, 1, name[:w - 1])
         self.box_users.refresh()
     
     def redraw_chatbuffer(self):
