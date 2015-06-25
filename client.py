@@ -46,6 +46,7 @@ class Client:
         except:
             pass
         self.ui.chatbuffer_add('* LISTENING TO CHANNEL {}'.format(channel))
+        self.ui.redraw_chathead(channel)
         self.client.subscribe('messages', [self.current_channel])
 
     def subscribe_to_users(self, channel):

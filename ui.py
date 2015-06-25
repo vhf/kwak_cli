@@ -5,13 +5,13 @@ class ChatUI:
         self.stdscr = stdscr
         self.userlist = []
         self.inputbuffer = ""
+        self.current_channel = None
         self.linebuffer = []
         self.chatbuffer = []
         self.chanlist = [' ABCDEFGHIJKLMNOPQR ', 'main']
 
         # Curses, why must you confuse me with your height, width, y, x
         termY, termX = stdscr.getmaxyx()
-
         # h, w, y, x
         padd_ui = 1
         padd_lt = 2
@@ -146,13 +146,17 @@ class ChatUI:
         self.redraw_ui()
         '''
 
-    def redraw_chathead(self):
+    def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
         self.box_chatHead.clear()
         h, w = self.box_chatHead.getmaxyx()
         i = 1
-        self.box_chatHead.addstr(0, w -2, "#")
-        self.box_chatHead.addstr(0, 0, "#SuperKwakChannel")
+        if (channel == None and self.current_channel == None):
+            self.box_chatHead.addstr(0, 0, "Type \"/join ChannelName\" to start chatting !")
+        else:
+            self.current_channel = channel
+            self.box_chatHead.addstr(0, 0, " #" + channel)
+        self.box_chatHead.addstr(0, w -(6 +1), "[HIDE]")
         self.box_chatHead.refresh()
 
     
@@ -253,7 +257,7 @@ class ChatUI:
                 if len(self.inputbuffer) > len(prompt):
                     self.inputbuffer = self.inputbuffer[:-1]
             elif last == curses.KEY_LEFT or last == curses.KEY_UP or last == curses.KEY_DOWN or last == curses.KEY_RIGHT:                
-                self.intputbuffer = "/dbg"
+                self.redraw_ui()
             elif last == curses.KEY_RESIZE:
                 self.resize()
             else:
