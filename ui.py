@@ -116,9 +116,6 @@ class ChatUI:
         boxSzY, boxSzX = self.box_chatbuffer.getmaxyx()
         boxCrY, boxCrX = self.box_chatbuffer.getparyx()
         self.chatbuffer_add("X: " + str(boxSzX))
-        #self.stdscr.hline(boxCrY, boxCrX, "A", boxSzX)
-        #self.stdscr.hline(boxSzY, boxCrX, "A", boxSzX)
-        #self.stdscr.hline(boxCrY +boxSzY, boxCrX, "-", boxSzX)        
         # box message
         boxSzY, boxSzX = self.box_chatline.getmaxyx()
         boxCrY, boxCrX = self.box_chatline.getparyx()
@@ -169,9 +166,7 @@ class ChatUI:
         for i, name in enumerate(self.chanlist):
             if i >= h:
                 break
-            #name = name.ljust(w - 1) + "|"
             self.box_channels.addstr(i, 0, name)
-        self.box_channels.addstr(h -1, 0, "MAXCHAN")
         self.box_channels.refresh()
 
     def redraw_chatline(self):
