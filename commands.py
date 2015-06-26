@@ -16,7 +16,7 @@ def lst(ui, client, rest):
     ui.redraw_ui()
 
 def quit(ui, client, rest):
-    pass
+    exit(0)
 
 commands = {
     'dbg':  [dbg, 'SYNOPSYS: lala', 'USAGE: lala'],
