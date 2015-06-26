@@ -59,7 +59,8 @@ class Client:
             # fields : channel | time | text | user
             timestamp = int(fields['time']) // 1000
             timestamp = datetime.fromtimestamp(timestamp).strftime('%H:%M')
-            self.ui.chatbuffer_add('{} {}: {}'.format(timestamp, fields['user'], fields['text']))
+            self.ui.chatbuffer_add('{} {}: {}'.format(
+                timestamp, fields['user'], fields['text']))
         elif collection == 'users':
             # fields : username | profile | color
             if len(fields['profile']) and bool(fields['profile'].get('online', False)):
