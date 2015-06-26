@@ -62,13 +62,13 @@ class Client:
             self.ui.chatbuffer_add('{} {}: {}'.format(hStamp, fields['user'], fields['text']))
         elif collection == 'users':
             # fields : username | profile | color
-            if len(fields['profile']) > 0 and bool(fields['profile']['online']) == True:
+            if len(fields['profile']) > 0 and bool(fields['profile'].get('online', False)):
                 self.ui.userlist.append(fields['username'])
                 self.ui.redraw_userlist()
 
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
-        
+
     def logged_in(self, error, data):
         if error:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))
@@ -77,6 +77,6 @@ class Client:
             self.client.call('setOnline', [])
             self.ui.chatbuffer_add('* LOGGED IN')
             # add self.username in userlist when logged and fix duplicates names
-            
+
     def logout(self):
         self.ui.chatbuffer_add('* BYE (LOVELY DUCK)')
