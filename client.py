@@ -57,9 +57,9 @@ class Client:
         # only add new messages, not backlog
         if collection == 'messages' and fields['time'] > self.now:
             # fields : channel | time | text | user
-            hStamp = int(fields['time']) // 1000
-            hStamp = datetime.fromtimestamp(hStamp).strftime('%H:%M')
-            self.ui.chatbuffer_add('{} {}: {}'.format(hStamp, fields['user'], fields['text']))
+            timestamp = int(fields['time']) // 1000
+            timestamp = datetime.fromtimestamp(timestamp).strftime('%H:%M')
+            self.ui.chatbuffer_add('{} {}: {}'.format(timestamp, fields['user'], fields['text']))
         elif collection == 'users':
             # fields : username | profile | color
             if len(fields['profile']) > 0 and bool(fields['profile'].get('online', False)):
