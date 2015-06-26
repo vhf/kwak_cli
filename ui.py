@@ -9,26 +9,20 @@ class ChatUI:
         self.current_channel = None
         self.linebuffer = []
         self.chatbuffer = []
-
         # Curses, why must you confuse me with your height, width, y, x
         termY, termX = stdscr.getmaxyx()
-        # h, w, y, x
-        padd_ui = 1
-        padd_lt = 2
         self.coordsBox = {
-            'channel':  [ termY -2, 18 +padd_lt, 0, 0],
-            'user':     [ termY -(2 +3), 18 +padd_lt, 3, termX -(18+2)],
-            'chathead': [ 1, termX -(18+padd_lt +padd_ui), 1, 0 +(18+padd_lt) +padd_ui],
-            'chatbody': [ termY -((1 +padd_ui)+(1+padd_ui)+padd_ui), termX -((18+padd_lt)+(18+padd_lt)+(padd_ui*2)), 3, (18 +padd_lt) +padd_ui],
-            'chatline': [ 1, termX, termY -1, 0]
+            'channel':  [termY-2,       20,       0,        0],
+            'user':     [termY-5,       20,       3, termX-20],
+            'chathead': [      1, termX-21,       1,       21],
+            'chatbody': [termY-5, termX-42,       3,       21],
+            'chatline': [      1,    termX, termY-1,        0]
         }
-        # define box
         self.box_channels = stdscr.derwin(*self.coordsBox['channel'])
         self.box_users    = stdscr.derwin(*self.coordsBox['user'])
         self.box_chatHead = stdscr.derwin(*self.coordsBox['chathead'])
         self.box_chatbuffer = stdscr.derwin(*self.coordsBox['chatbody'])
         self.box_chatline = stdscr.derwin(*self.coordsBox['chatline'])
-        
         self.redraw_ui()
 
     def resize(self):
