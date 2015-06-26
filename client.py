@@ -62,7 +62,7 @@ class Client:
             self.ui.chatbuffer_add('{} {}: {}'.format(timestamp, fields['user'], fields['text']))
         elif collection == 'users':
             # fields : username | profile | color
-            if len(fields['profile']) > 0 and bool(fields['profile'].get('online', False)):
+            if len(fields['profile']) and bool(fields['profile'].get('online', False)):
                 self.ui.userlist.append(fields['username'])
                 self.ui.redraw_userlist()
 
