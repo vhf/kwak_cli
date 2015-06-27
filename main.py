@@ -3,6 +3,9 @@ from ui import ChatUI
 from client import Client
 import configparser
 import time
+from commands import commands
+from commands import dbg, hot, join, lst, quit
+
 
 def main(stdscr):
     cp = configparser.ConfigParser()
@@ -19,23 +22,26 @@ def main(stdscr):
 
     message = ''
     while message != '/quit':
-        message = ui.wait_input()
-        if message[0:6] == '/join ':
-            client.subscribe_to_channel(message[6:])
-        elif message[0:4] == '/hot':
-            ui.chatbuffer_add(', '.join(client.hot_channels_name))
-            client.client.call('getHotChannels', [], client.set_hot_channels_name)
-        elif message[0:4] == '/dbg': # Usefull ;)
-            ui.redraw_userlist()
-            ui.chatbuffer_add(str(client.ui.userlist))
-            client.client.call('setOnline', [])    
-        elif message[0:5] == '/list':
-            ui.chatbuffer_add(', '.join(client.all_channels_name));
-            client.client.call('channelList', [], client.set_all_channels_name)
-            ui.redraw_ui()
-        elif message != '/quit':
-            client.client.insert('messages', {'channel': client.current_channel, 'text': message})
+        try:
+            message = ui.wait_input().strip()
+            if message[0] != '/' or message[0:2] == '//':
+                client.client.insert('messages', {'channel': client.current_channel, 'text': message})
+            else:
+                try:
+                    end = message.index(' ')
+                    command = message[1:end].strip()
+                    rest = message[end:].strip()
+                except ValueError:
+                    command = message[1:].strip()
+                    rest = None
 
-    client.logout()
-    time.sleep(3)
+                if commands.get(command, False):
+                    commands[command][0](ui, client, rest)
+                else:
+                    ui.chatbuffer_add('Unknown command {}'.format(command))
+
+        except KeyboardInterrupt:
+            client.logout()
+            time.sleep(3)
+
 wrapper(main)
