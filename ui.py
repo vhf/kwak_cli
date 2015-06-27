@@ -68,6 +68,12 @@ class ChatUI:
             self.boxes[key].mvderwin( self.coordsBox[key][2], self.coordsBox[key][3])
             self.boxes[key].mvwin(    self.coordsBox[key][2], self.coordsBox[key][3])
             self.boxes[key].resize(   self.coordsBox[key][0], self.coordsBox[key][1])
+
+        """
+        self.linebuffer = []
+        for msg in self.chatbuffer:
+            self._linebuffer_add(msg)
+        """
         self.redraw_ui()
     
 
@@ -105,25 +111,6 @@ class ChatUI:
         self.redraw_chatline()
 
         
-        
-    '''def resize(self):
-        """Handles a change in terminal size"""
-        u_h, u_w = self.win_userlist.getmaxyx()
-        h, w = self.stdscr.getmaxyx()
-
-        self.win_chatline.mvwin(h - 1, 0)
-        self.win_chatline.resize(1, w)
-
-        self.win_userlist.resize(h - 2, u_w)
-        self.win_chatbuffer.resize(h - 2, w - u_w - 2)
-
-        self.linebuffer = []
-        for msg in self.chatbuffer:
-            self._linebuffer_add(msg)
-
-        self.redraw_ui()
-        '''
-
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
         self.boxes['chathead'].clear()
@@ -236,7 +223,7 @@ class ChatUI:
             elif last == curses.KEY_BACKSPACE or last == 127:
                 if len(self.inputbuffer) > len(prompt):
                     self.inputbuffer = self.inputbuffer[:-1]
-            elif last == curses.KEY_LEFT or last == curses.KEY_UP or last == curses.KEY_DOWN or last == curses.KEY_RIGHT:                
+            elif last==curses.KEY_LEFT or last==curses.KEY_UP or last==curses.KEY_DOWN or last==curses.KEY_RIGHT:
                 self.redraw_ui()
             elif last == curses.KEY_RESIZE:
                 self.resize()
