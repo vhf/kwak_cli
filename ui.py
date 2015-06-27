@@ -40,10 +40,6 @@ class ChatUI:
             self.coordsBox['chathead'][2],
             boxChannelSzX +padd_ui
         ]
-        """ this 3 lines => for: """
-        self.boxes['chathead'].mvderwin( self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
-        self.boxes['chathead'].mvwin(    self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
-        self.boxes['chathead'].resize(   self.coordsBox['chathead'][0], self.coordsBox['chathead'][1])
         # box chatline
         self.coordsBox['chatline'] = [
             self.coordsBox['chatline'][0],
@@ -51,26 +47,15 @@ class ChatUI:
             termY -1,
             self.coordsBox['chatline'][3]
         ]
-        self.boxes['chatline'].mvderwin( self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
-        self.boxes['chatline'].mvwin(    self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
-        self.boxes['chatline'].resize(   self.coordsBox['chatline'][0], self.coordsBox['chatline'][1])
         # box channel | just h !
         self.coordsBox['channel'][0] = termY -(self.coordsBox['chatline'][0] + padd_ui)
-        self.boxes['channel'].mvderwin( self.coordsBox['channel'][2], self.coordsBox['channel'][3])
-        self.boxes['channel'].mvwin(    self.coordsBox['channel'][2], self.coordsBox['channel'][3])
-        self.boxes['channel'].resize(   self.coordsBox['channel'][0], self.coordsBox['channel'][1])
-        
         # box user
-        # calcul max size.. actually 18 +padding
         self.coordsBox['user'] = [
             termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)+(self.coordsBox['chatline'][0]+padd_ui)),
             self.coordsBox['user'][1],
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             termX - self.coordsBox['user'][1]
         ]
-        self.boxes['user'].mvderwin( self.coordsBox['user'][2], self.coordsBox['user'][3])
-        self.boxes['user'].mvwin(    self.coordsBox['user'][2], self.coordsBox['user'][3])
-        self.boxes['user'].resize(   self.coordsBox['user'][0], self.coordsBox['user'][1])
         # box chat
         self.coordsBox['chatbody'] = [
             termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)+(self.coordsBox['chatline'][0]+padd_ui)),
@@ -78,11 +63,11 @@ class ChatUI:
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             self.coordsBox['channel'][3] + self.coordsBox['channel'][1] + padd_ui
         ]
-        self.boxes['chatbody'].mvderwin( self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
-        self.boxes['chatbody'].mvwin(    self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
-        self.boxes['chatbody'].resize(   self.coordsBox['chatbody'][0], self.coordsBox['chatbody'][1])
-        
-        # redraw
+        # Apply changes
+        for key in self.boxes:
+            self.boxes[key].mvderwin( self.coordsBox[key][2], self.coordsBox[key][3])
+            self.boxes[key].mvwin(    self.coordsBox[key][2], self.coordsBox[key][3])
+            self.boxes[key].resize(   self.coordsBox[key][0], self.coordsBox[key][1])
         self.redraw_ui()
     
 
