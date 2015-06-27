@@ -9,6 +9,7 @@ class ChatUI:
         self.current_channel = None
         self.linebuffer = []
         self.chatbuffer = []
+
         # Curses, why must you confuse me with your height, width, y, x
         termY, termX = stdscr.getmaxyx()
         self.coordsBox = {
@@ -18,11 +19,10 @@ class ChatUI:
             'chatbody': [termY-5, termX-42,       3,       21],
             'chatline': [      1,    termX, termY-1,        0]
         }
-        self.box_channels = stdscr.derwin(*self.coordsBox['channel'])
-        self.box_users    = stdscr.derwin(*self.coordsBox['user'])
-        self.box_chatHead = stdscr.derwin(*self.coordsBox['chathead'])
-        self.box_chatbuffer = stdscr.derwin(*self.coordsBox['chatbody'])
-        self.box_chatline = stdscr.derwin(*self.coordsBox['chatline'])
+        # Declaration of containers
+        self.boxes =  {}
+        for key in self.coordsBox:
+            self.boxes[key] = stdscr.derwin(*self.coordsBox[key])
         self.redraw_ui()
 
     def resize(self):
@@ -32,8 +32,8 @@ class ChatUI:
         # h, w , y, x
         """ Recalc all boxes """
         # box chathead
-        boxChannelSzY, boxChannelSzX = self.box_channels.getmaxyx()
-        boxChannelCrY, boxChannelCrX = self.box_channels.getparyx()
+        boxChannelSzY, boxChannelSzX = self.boxes['channel'].getmaxyx()
+        boxChannelCrY, boxChannelCrX = self.boxes['channel'].getparyx()
         self.coordsBox['chathead'] = [
             self.coordsBox['chathead'][0],
             termX -(boxChannelSzX+padd_ui),
@@ -41,9 +41,9 @@ class ChatUI:
             boxChannelSzX +padd_ui
         ]
         """ this 3 lines => for: """
-        self.box_chatHead.mvderwin( self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
-        self.box_chatHead.mvwin(    self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
-        self.box_chatHead.resize(   self.coordsBox['chathead'][0], self.coordsBox['chathead'][1])
+        self.boxes['chathead'].mvderwin( self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
+        self.boxes['chathead'].mvwin(    self.coordsBox['chathead'][2], self.coordsBox['chathead'][3])
+        self.boxes['chathead'].resize(   self.coordsBox['chathead'][0], self.coordsBox['chathead'][1])
         # box chatline
         self.coordsBox['chatline'] = [
             self.coordsBox['chatline'][0],
@@ -51,14 +51,14 @@ class ChatUI:
             termY -1,
             self.coordsBox['chatline'][3]
         ]
-        self.box_chatline.mvderwin( self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
-        self.box_chatline.mvwin(    self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
-        self.box_chatline.resize(   self.coordsBox['chatline'][0], self.coordsBox['chatline'][1])
+        self.boxes['chatline'].mvderwin( self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
+        self.boxes['chatline'].mvwin(    self.coordsBox['chatline'][2], self.coordsBox['chatline'][3])
+        self.boxes['chatline'].resize(   self.coordsBox['chatline'][0], self.coordsBox['chatline'][1])
         # box channel | just h !
         self.coordsBox['channel'][0] = termY -(self.coordsBox['chatline'][0] + padd_ui)
-        self.box_channels.mvderwin( self.coordsBox['channel'][2], self.coordsBox['channel'][3])
-        self.box_channels.mvwin(    self.coordsBox['channel'][2], self.coordsBox['channel'][3])
-        self.box_channels.resize(   self.coordsBox['channel'][0], self.coordsBox['channel'][1])
+        self.boxes['channel'].mvderwin( self.coordsBox['channel'][2], self.coordsBox['channel'][3])
+        self.boxes['channel'].mvwin(    self.coordsBox['channel'][2], self.coordsBox['channel'][3])
+        self.boxes['channel'].resize(   self.coordsBox['channel'][0], self.coordsBox['channel'][1])
         
         # box user
         # calcul max size.. actually 18 +padding
@@ -68,9 +68,9 @@ class ChatUI:
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             termX - self.coordsBox['user'][1]
         ]
-        self.box_users.mvderwin( self.coordsBox['user'][2], self.coordsBox['user'][3])
-        self.box_users.mvwin(    self.coordsBox['user'][2], self.coordsBox['user'][3])
-        self.box_users.resize(   self.coordsBox['user'][0], self.coordsBox['user'][1])
+        self.boxes['user'].mvderwin( self.coordsBox['user'][2], self.coordsBox['user'][3])
+        self.boxes['user'].mvwin(    self.coordsBox['user'][2], self.coordsBox['user'][3])
+        self.boxes['user'].resize(   self.coordsBox['user'][0], self.coordsBox['user'][1])
         # box chat
         self.coordsBox['chatbody'] = [
             termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)+(self.coordsBox['chatline'][0]+padd_ui)),
@@ -78,9 +78,9 @@ class ChatUI:
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             self.coordsBox['channel'][3] + self.coordsBox['channel'][1] + padd_ui
         ]
-        self.box_chatbuffer.mvderwin( self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
-        self.box_chatbuffer.mvwin(    self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
-        self.box_chatbuffer.resize(   self.coordsBox['chatbody'][0], self.coordsBox['chatbody'][1])
+        self.boxes['chatbody'].mvderwin( self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
+        self.boxes['chatbody'].mvwin(    self.coordsBox['chatbody'][2], self.coordsBox['chatbody'][3])
+        self.boxes['chatbody'].resize(   self.coordsBox['chatbody'][0], self.coordsBox['chatbody'][1])
         
         # redraw
         self.redraw_ui()
@@ -91,24 +91,24 @@ class ChatUI:
         termY, termX = self.stdscr.getmaxyx()
         self.stdscr.clear()
         # box chans
-        boxSzY, boxSzX = self.box_channels.getmaxyx()
-        boxCrY, boxCrX = self.box_channels.getparyx()
+        boxSzY, boxSzX = self.boxes['channel'].getmaxyx()
+        boxCrY, boxCrX = self.boxes['channel'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX +boxSzX, "|", boxSzY)
         # box users
-        boxSzY, boxSzX = self.box_users.getmaxyx()
-        boxCrY, boxCrX = self.box_users.getparyx()
+        boxSzY, boxSzX = self.boxes['user'].getmaxyx()
+        boxCrY, boxCrX = self.boxes['user'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX -1, "|", boxSzY)
         # box chatHeader
-        boxSzY, boxSzX = self.box_chatHead.getmaxyx()
-        boxCrY, boxCrX = self.box_chatHead.getparyx()
+        boxSzY, boxSzX = self.boxes['chathead'].getmaxyx()
+        boxCrY, boxCrX = self.boxes['chathead'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
         self.stdscr.hline(boxCrY +boxSzY, boxCrX, "-", boxSzX)
         # box chatbuffer
-        boxSzY, boxSzX = self.box_chatbuffer.getmaxyx()
-        boxCrY, boxCrX = self.box_chatbuffer.getparyx()
+        boxSzY, boxSzX = self.boxes['chatbody'].getmaxyx()
+        boxCrY, boxCrX = self.boxes['chatbody'].getparyx()
         # box message
-        boxSzY, boxSzX = self.box_chatline.getmaxyx()
-        boxCrY, boxCrX = self.box_chatline.getparyx()
+        boxSzY, boxSzX = self.boxes['chatline'].getmaxyx()
+        boxCrY, boxCrX = self.boxes['chatline'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
         
         self.stdscr.refresh()
@@ -141,61 +141,61 @@ class ChatUI:
 
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
-        self.box_chatHead.clear()
-        h, w = self.box_chatHead.getmaxyx()
+        self.boxes['chathead'].clear()
+        h, w = self.boxes['chathead'].getmaxyx()
         i = 1
         if (channel == None and self.current_channel == None):
-            self.box_chatHead.addstr(0, 0, "Type \"/join ChannelName\" to start chatting !")
+            self.boxes['chathead'].addstr(0, 0, "Type \"/join ChannelName\" to start chatting !")
         elif (channel != None):
             self.current_channel = channel
-            self.box_chatHead.addstr(0, 0, " #" + str(channel))
+            self.boxes['chathead'].addstr(0, 0, " #" + str(channel))
         else:
-            self.box_chatHead.addstr(0, 0, " #" + str(self.current_channel))
-        self.box_chatHead.addstr(0, w -(6 +1), "[HIDE]")
-        self.box_chatHead.refresh()
+            self.boxes['chathead'].addstr(0, 0, " #" + str(self.current_channel))
+        self.boxes['chathead'].addstr(0, w -(6 +1), "[HIDE]")
+        self.boxes['chathead'].refresh()
 
     
     def redraw_chanlist(self):
         """Redraw the userlist"""
-        self.box_channels.clear()
-        h, w = self.box_channels.getmaxyx()
+        self.boxes['channel'].clear()
+        h, w = self.boxes['channel'].getmaxyx()
         for i, name in enumerate(self.chanlist):
             if i >= h:
                 break
-            self.box_channels.addstr(i, 0, " #" + name)
-        self.box_channels.refresh()
+            self.boxes['channel'].addstr(i, 0, " #" + name)
+        self.boxes['channel'].refresh()
 
     def redraw_chatline(self):
         """Redraw the user input textbox"""
-        h, w = self.box_chatline.getmaxyx()
-        self.box_chatline.clear()
+        h, w = self.boxes['chatline'].getmaxyx()
+        self.boxes['chatline'].clear()
         start = len(self.inputbuffer) - w + 1
         if start < 0:
             start = 0
-        self.box_chatline.addstr(0, 0, self.inputbuffer[start:])
-        self.box_chatline.refresh()
+        self.boxes['chatline'].addstr(0, 0, self.inputbuffer[start:])
+        self.boxes['chatline'].refresh()
 
     def redraw_userlist(self):
         """Redraw the userlist"""
-        self.box_users.clear()
-        h, w = self.box_users.getmaxyx()
+        self.boxes['user'].clear()
+        h, w = self.boxes['user'].getmaxyx()
         for i, name in enumerate(self.userlist):
             if i >= h:
                 break
-            self.box_users.addstr(i, 1, name[:w - 1])
-        self.box_users.refresh()
+            self.boxes['user'].addstr(i, 1, name[:w - 1])
+        self.boxes['user'].refresh()
     
     def redraw_chatbuffer(self):
         """Redraw the chat message buffer"""
-        self.box_chatbuffer.clear()
-        h, w = self.box_chatbuffer.getmaxyx()
+        self.boxes['chatbody'].clear()
+        h, w = self.boxes['chatbody'].getmaxyx()
         j = len(self.linebuffer) - h
         if j < 0:
             j = 0
         for i in range(min(h, len(self.linebuffer))):
-            self.box_chatbuffer.addstr(i, 0, self.linebuffer[j])
+            self.boxes['chatbody'].addstr(i, 0, self.linebuffer[j])
             j += 1
-        self.box_chatbuffer.refresh()
+        self.boxes['chatbody'].refresh()
 
     def chatbuffer_add(self, msg):
         """
@@ -208,11 +208,11 @@ class ChatUI:
         self._linebuffer_add(msg)
         self.redraw_chatbuffer()
         self.redraw_chatline()
-        self.box_chatline.cursyncup()
+        self.boxes['chatline'].cursyncup()
 
     def _linebuffer_add(self, msg):
         h, w = self.stdscr.getmaxyx()
-        u_h, u_w = self.box_users.getmaxyx()
+        u_h, u_w = self.boxes['user'].getmaxyx()
         w = w - u_w - 2
         while len(msg) >= w:
             self.linebuffer.append(msg[:w])
@@ -238,7 +238,7 @@ class ChatUI:
         """
         self.inputbuffer = prompt
         self.redraw_chatline()
-        self.box_chatline.cursyncup()
+        self.boxes['chatline'].cursyncup()
         last = -1
         while last != ord('\n'):
             last = self.stdscr.getch()
@@ -246,7 +246,7 @@ class ChatUI:
                 tmp = self.inputbuffer
                 self.inputbuffer = ""
                 self.redraw_chatline()
-                self.box_chatline.cursyncup()
+                self.boxes['chatline'].cursyncup()
                 return tmp[len(prompt):]
             elif last == curses.KEY_BACKSPACE or last == 127:
                 if len(self.inputbuffer) > len(prompt):
