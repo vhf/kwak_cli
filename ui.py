@@ -25,40 +25,29 @@ class ChatUI:
             self.boxes[key] = stdscr.derwin(*self.coordsBox[key])
         self.redraw_ui()
 
+        
     def resize(self):
-        termY, termX = self.stdscr.getmaxyx()
         padd_ui = 1
-        padd_lt = 2        
-        # h, w , y, x
-        """ Recalc all boxes """
-        # box chathead
+        padd_lt = 2
+        termY, termX = self.stdscr.getmaxyx()
+        # Recalc all boxes and do not forget: h=0,w=1,y=2,x=3
         boxChannelSzY, boxChannelSzX = self.boxes['channel'].getmaxyx()
         boxChannelCrY, boxChannelCrX = self.boxes['channel'].getparyx()
-        self.coordsBox['chathead'] = [
-            self.coordsBox['chathead'][0],
-            termX -(boxChannelSzX+padd_ui),
-            self.coordsBox['chathead'][2],
-            boxChannelSzX +padd_ui
-        ]
-        # box chatline
-        self.coordsBox['chatline'] = [
-            self.coordsBox['chatline'][0],
-            termX,
-            termY -1,
-            self.coordsBox['chatline'][3]
-        ]
-        # box channel | just h !
-        self.coordsBox['channel'][0] = termY -(self.coordsBox['chatline'][0] + padd_ui)
-        # box user
+        self.coordsBox['chathead'][1] = termX -(boxChannelSzX+padd_ui)
+        self.coordsBox['chathead'][3] = boxChannelSzX +padd_ui
+        self.coordsBox['chatline'][1] = termX
+        self.coordsBox['chatline'][2] = termY -1
+        self.coordsBox['channel'][0] = termY -(self.coordsBox['chatline'][0] +padd_ui)
         self.coordsBox['user'] = [
-            termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)+(self.coordsBox['chatline'][0]+padd_ui)),
+            termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)
+                    +(self.coordsBox['chatline'][0]+padd_ui)),
             self.coordsBox['user'][1],
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             termX - self.coordsBox['user'][1]
         ]
-        # box chat
         self.coordsBox['chatbody'] = [
-            termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)+(self.coordsBox['chatline'][0]+padd_ui)),
+            termY -((self.coordsBox['chathead'][2]+self.coordsBox['chathead'][0]+padd_ui)
+                    +(self.coordsBox['chatline'][0]+padd_ui)),
             termX - (self.coordsBox['channel'][1] + self.coordsBox['user'][1] + padd_ui + 1),
             self.coordsBox['chathead'][2] + self.coordsBox['chathead'][0] + padd_ui,
             self.coordsBox['channel'][3] + self.coordsBox['channel'][1] + padd_ui
@@ -109,7 +98,6 @@ class ChatUI:
         self.redraw_chathead()
         self.redraw_chatbuffer()
         self.redraw_chatline()
-
         
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
@@ -125,7 +113,6 @@ class ChatUI:
             self.boxes['chathead'].addstr(0, 0, " #" + str(self.current_channel))
         self.boxes['chathead'].addstr(0, w -(6 +1), "[HIDE]")
         self.boxes['chathead'].refresh()
-
     
     def redraw_chanlist(self):
         """Redraw the userlist"""
@@ -199,7 +186,6 @@ class ChatUI:
         res = self.wait_input()
         res = res[len(msg):]
         return res
-
 
     def wait_input(self, prompt=""):
         """
