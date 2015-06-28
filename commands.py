@@ -21,6 +21,7 @@ def quit(ui, client, rest):
 commands = {
     'dbg':  [dbg, 'SYNOPSYS: lala', 'USAGE: lala'],
     'hot':  [hot, 'SYNOPSYS: lala', 'USAGE: lala'],
+    'j':    [join, 'SYNOPSYS: lala', 'USAGE: lala'],
     'join': [join, 'SYNOPSYS: lala', 'USAGE: lala'],
     'list': [lst, 'SYNOPSYS: lala', 'USAGE: lala'],
     'quit': [quit, 'SYNOPSYS: lala', 'USAGE: lala'],
