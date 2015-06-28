@@ -32,13 +32,14 @@ class Client:
             self.ui.chatbuffer_add(error)
             return
         self.hot_channels_name = result
+        self.ui.chanlist = self.hot_channels_name
+        self.ui.redraw_chanlist()
 
     def set_all_channels_name(self, error, result):
         if error:
             self.ui.chatbuffer_add(error)
             return
         self.all_channels_name = result
-        self.ui.chanlist = self.all_channels_name
 
     def subscribe_to_channel(self, channel):
         self.current_channel = channel
@@ -54,6 +55,7 @@ class Client:
         self.client.subscribe('users', [channel])
 
     def added(self, collection, id, fields):
+        self.client.call('setOnline', [])
         # only add new messages, not backlog
         if collection == 'messages' and fields['time'] > self.now:
             # fields : channel | time | text | user
