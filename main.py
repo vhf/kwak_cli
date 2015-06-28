@@ -42,6 +42,6 @@ def main(stdscr):
 
         except KeyboardInterrupt:
             client.logout()
-            time.sleep(3)
+            time.sleep(1)
 
 wrapper(main)
