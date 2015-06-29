@@ -10,6 +10,7 @@ class Client:
         self.username = username
         self.password = password
         self.ui = ui
+        self.ui.print_logo()
         self.now = mktime(datetime.now().timetuple())*1e3
         self.resume_token = ''
         self.client = MeteorClient('wss://kwak.io/websocket')

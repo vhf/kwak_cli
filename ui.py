@@ -25,7 +25,7 @@ class ChatUI:
             self.boxes[key] = stdscr.derwin(*self.coordsBox[key])
         self.redraw_ui()
 
-        
+
     def resize(self):
         padd_ui = 1
         padd_lt = 2
@@ -64,7 +64,7 @@ class ChatUI:
             self._linebuffer_add(msg)
         """
         self.redraw_ui()
-    
+
 
     def redraw_ui(self):
         """Redraws the entire UI"""
@@ -90,7 +90,7 @@ class ChatUI:
         boxSzY, boxSzX = self.boxes['chatline'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chatline'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
-        
+
         self.stdscr.refresh()
 
         self.redraw_userlist()
@@ -98,7 +98,7 @@ class ChatUI:
         self.redraw_chathead()
         self.redraw_chatbuffer()
         self.redraw_chatline()
-        
+
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
         self.boxes['chathead'].clear()
@@ -113,7 +113,7 @@ class ChatUI:
             self.boxes['chathead'].addstr(0, 0, " #" + str(self.current_channel))
         self.boxes['chathead'].addstr(0, w -(6 +1), "[HIDE]")
         self.boxes['chathead'].refresh()
-    
+
     def redraw_chanlist(self):
         """Redraw the userlist"""
         self.boxes['channel'].clear()
@@ -143,7 +143,7 @@ class ChatUI:
                 break
             self.boxes['user'].addstr(i, 1, name[:w - 1])
         self.boxes['user'].refresh()
-    
+
     def redraw_chatbuffer(self):
         """Redraw the chat message buffer"""
         self.boxes['chatbody'].clear()
@@ -178,7 +178,7 @@ class ChatUI:
             msg = msg[w:]
         if msg:
             self.linebuffer.append(msg)
-    
+
     def prompt(self, msg):
         """Prompts the user for input and returns it"""
         self.inputbuffer = msg
@@ -218,4 +218,40 @@ class ChatUI:
                 self.inputbuffer += self.stdscr.get_wch()
             self.redraw_chatline()
 
-
+    def print_logo(self):
+        self.chatbuffer_add('                                                               ')
+        self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
+        self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
+        self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
+        self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
+        self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
+        self.chatbuffer_add('                ~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~')
+        self.chatbuffer_add('             ,~~~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~')
+        self.chatbuffer_add('           :~~~~~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~')
+        self.chatbuffer_add('          ~~~~~~~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~')
+        self.chatbuffer_add('        =~~~~~~......................,,,,,,,,,,,,,,,,,,,,,    ')
+        self.chatbuffer_add('       ~~~~~~~~......................,,,,,,,,,,,,,,,,,,,,,    ')
+        self.chatbuffer_add('      ~~~~~~~~~......................,,,,,,,,,,,,,,,,,,,,,    ')
+        self.chatbuffer_add('     ~~~~~~~~~~~~~~~~~+++++++++++++++++++++++++++++,          ')
+        self.chatbuffer_add('     ~~~~~~~~~~~~~~~~~++++++++++++++=++++++++++++++,          ')
+        self.chatbuffer_add('    ~~~~~~~~~~~~~~~~~~+++++++++++++++++++++,,,,++++,          ')
+        self.chatbuffer_add('    ~~~~~~~~~~~~~~~~~~++++++++++++++++++++~,,,,~+++=~~~~~~~~~~')
+        self.chatbuffer_add('   ~~~~~~~~~~~~~~~~~~~+++++++++++++++++++++~.,~++++=~~~~~~~~= ')
+        self.chatbuffer_add('   ~~~~~~~~~~~~~~~~~~~+++++++++++++++++++++++++++++=~~~~~~~   ')
+        self.chatbuffer_add('   ~~~~~~~~~~~~~~~~~~~+++++++++++++++++++++++++++++=~~~~~     ')
+        self.chatbuffer_add('   ++++++++++++++++++++++++++++++++++++++++++++++++~~~~~~     ')
+        self.chatbuffer_add('   ++++++++++++++++++++++++++++++++++++++++++++++++:~~~~~~    ')
+        self.chatbuffer_add('   ++++++++++++++++++++++++++++++++++++++++++++++++:~~~~~~~~  ')
+        self.chatbuffer_add('   ++++++++++++++++++++++++++++++++++++++++++++++++~~~~~~~~~~ ')
+        self.chatbuffer_add('    +++++++++++++++++++++++++++++++++++++++++++++++           ')
+        self.chatbuffer_add('    ++++++++++++++++++++++++++++++++++++++++++++++            ')
+        self.chatbuffer_add('     ++++++++++++++++++++++++++++++++++++++++++++             ')
+        self.chatbuffer_add('      +++++++++++++++++++++++++++++++++++++++++++             ')
+        self.chatbuffer_add('       +++++++++++++++++++++++++++++++++++++++++              ')
+        self.chatbuffer_add('        +++++++++++++++++++++++++++++++++++++++               ')
+        self.chatbuffer_add('         ++++++++++++++++++++++++++++++++++++                 ')
+        self.chatbuffer_add('          ++++++++++++++++++++++++++++++++++                  ')
+        self.chatbuffer_add('            ++++++++++++++++++++++++++++++                    ')
+        self.chatbuffer_add('               +++++++++++++++++++++++++                      ')
+        self.chatbuffer_add('                  +++++++++++++++++++                         ')
+        self.chatbuffer_add('                       ++++++++                               ')
