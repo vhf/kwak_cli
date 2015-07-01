@@ -255,3 +255,5 @@ class ChatUI:
         self.chatbuffer_add('               +++++++++++++++++++++++++                      ')
         self.chatbuffer_add('                  +++++++++++++++++++                         ')
         self.chatbuffer_add('                       ++++++++                               ')
+        self.chatbuffer_add('                                                              ')
+        
