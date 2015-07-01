@@ -219,6 +219,8 @@ class ChatUI:
             self.redraw_chatline()
 
     def print_logo(self):
+        if (self.coordsBox['chatbody'][1] < 65):
+            return 1
         self.chatbuffer_add('                                                               ')
         self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
         self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
