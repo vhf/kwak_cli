@@ -1,8 +1,6 @@
 def dbg(ui, client, rest):
     ui.redraw_userlist()
-    ui.chatbuffer_add(str(client.ui.userlist))
     client.client.call('setOnline', [])
-    ui.chatbuffer_add(str(ui.boxes))
 
 def hot(ui, client, rest):
     ui.chatbuffer_add(', '.join(client.hot_channels_name))
