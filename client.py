@@ -83,7 +83,7 @@ class Client:
             
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
-
+        
     def logged_in(self, error, data):
         if error:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))

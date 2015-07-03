@@ -15,9 +15,9 @@ def invt(ui, client, rest):
         return 1
     client.client.call('invite', rest)
     
-def join(ui, client, rest):
+def join(ui, client, rest):    
     client.subscribe_to_channel(rest)
-
+    
 def lst(ui, client, rest):
     ui.chatbuffer_add(', '.join(client.all_channels_name))
     client.client.call('channelList', [], client.set_all_channels_name)

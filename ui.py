@@ -127,7 +127,7 @@ class ChatUI:
     def redraw_chatline(self):
         """Redraw the user input textbox"""
         h, w = self.boxes['chatline'].getmaxyx()
-        self.boxes['chatline'].clear()
+        self.boxes['chatline'].erase()
         start = len(self.inputbuffer) - w + 1
         if start < 0:
             start = 0
