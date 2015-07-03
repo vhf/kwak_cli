@@ -69,7 +69,7 @@ class ChatUI:
     def redraw_ui(self):
         """Redraws the entire UI"""
         termY, termX = self.stdscr.getmaxyx()
-        self.stdscr.clear()
+        self.stdscr.erase()
         # box chans
         boxSzY, boxSzX = self.boxes['channel'].getmaxyx()
         boxCrY, boxCrX = self.boxes['channel'].getparyx()
@@ -101,7 +101,7 @@ class ChatUI:
 
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
-        self.boxes['chathead'].clear()
+        self.boxes['chathead'].erase()
         h, w = self.boxes['chathead'].getmaxyx()
         i = 1
         if (channel == None and self.current_channel == None):
@@ -116,7 +116,7 @@ class ChatUI:
 
     def redraw_chanlist(self):
         """Redraw the userlist"""
-        self.boxes['channel'].clear()
+        self.boxes['channel'].erase()
         h, w = self.boxes['channel'].getmaxyx()
         for i, name in enumerate(self.chanlist):
             if i >= h:
@@ -136,7 +136,7 @@ class ChatUI:
 
     def redraw_userlist(self):
         """Redraw the userlist"""
-        self.boxes['user'].clear()
+        self.boxes['user'].erase()
         h, w = self.boxes['user'].getmaxyx()
         for i, name in enumerate(self.userlist):
             if i >= h:
@@ -146,7 +146,7 @@ class ChatUI:
 
     def redraw_chatbuffer(self):
         """Redraw the chat message buffer"""
-        self.boxes['chatbody'].clear()
+        self.boxes['chatbody'].erase()
         h, w = self.boxes['chatbody'].getmaxyx()
         j = len(self.linebuffer) - h
         if j < 0:
