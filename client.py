@@ -32,21 +32,21 @@ class Client:
         """self.client.update('users', {'username': self.username},
                            {'profile.chans': self.current_channel}, callback=self.update_callback)
         """
-        
+
     """
     def update_callback(self, error, result):
         self.ui.chatbuffer_add("UPDATED !")
         self.ui.chatbuffer_add(str(error))
         self.ui.chatbuffer_add(str(result))
     """
-    
+
     def set_hot_channels_name(self, error, result):
         if error:
             self.ui.chatbuffer_add(error)
             return
         self.hot_channels_name = result
         self.ui.chanlist = self.hot_channels_name
-        self.ui.redraw_chanlist()
+        self.ui.redraw_ui()
 
     def set_all_channels_name(self, error, result):
         if error:
@@ -79,11 +79,11 @@ class Client:
             # fields : username | profile | color
             if len(fields['profile']) and bool(fields['profile'].get('online', False)):
                 self.ui.userlist.append(fields['username'])
-                self.ui.redraw_userlist()
-            
+                self.ui.redraw_ui()
+
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
-        
+
     def logged_in(self, error, data):
         if error:
             self.ui.chatbuffer_add('LOGIN ERROR {}'.format(error))

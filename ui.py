@@ -25,7 +25,6 @@ class ChatUI:
             self.boxes[key] = stdscr.derwin(*self.coordsBox[key])
         self.redraw_ui()
 
-
     def resize(self):
         padd_ui = 1
         padd_lt = 2
@@ -93,8 +92,8 @@ class ChatUI:
 
         self.stdscr.refresh()
 
-        self.redraw_userlist()
-        self.redraw_chanlist()
+        self.redraw_list('channel', self.chanlist, " #")
+        self.redraw_list('user', self.userlist)
         self.redraw_chathead()
         self.redraw_chatbuffer()
         self.redraw_chatline()
@@ -114,15 +113,14 @@ class ChatUI:
         self.boxes['chathead'].addstr(0, w -(6 +1), "[HIDE]")
         self.boxes['chathead'].refresh()
 
-    def redraw_chanlist(self):
-        """Redraw the userlist"""
-        self.boxes['channel'].erase()
-        h, w = self.boxes['channel'].getmaxyx()
-        for i, name in enumerate(self.chanlist):
+    def redraw_list(self, winame, data, prfx=" "):
+        self.boxes[winame].erase()
+        h, w = self.boxes[winame].getmaxyx()
+        for i, name in enumerate(data):
             if i >= h:
                 break
-            self.boxes['channel'].addstr(i, 0, " #" + name)
-        self.boxes['channel'].refresh()
+            self.boxes[winame].addstr(i, 0, str(prfx)+name)
+        self.boxes[winame].refresh()
 
     def redraw_chatline(self):
         """Redraw the user input textbox"""
@@ -133,16 +131,6 @@ class ChatUI:
             start = 0
         self.boxes['chatline'].addstr(0, 0, self.inputbuffer[start:])
         self.boxes['chatline'].refresh()
-
-    def redraw_userlist(self):
-        """Redraw the userlist"""
-        self.boxes['user'].erase()
-        h, w = self.boxes['user'].getmaxyx()
-        for i, name in enumerate(self.userlist):
-            if i >= h:
-                break
-            self.boxes['user'].addstr(i, 1, name[:w - 1])
-        self.boxes['user'].refresh()
 
     def redraw_chatbuffer(self):
         """Redraw the chat message buffer"""
@@ -258,4 +246,3 @@ class ChatUI:
         self.chatbuffer_add('                  +++++++++++++++++++                         ')
         self.chatbuffer_add('                       ++++++++                               ')
         self.chatbuffer_add('                                                              ')
-        
