@@ -69,23 +69,18 @@ class ChatUI:
         """Redraws the entire UI"""
         termY, termX = self.stdscr.getmaxyx()
         self.stdscr.erase()
-        # box chans
         boxSzY, boxSzX = self.boxes['channel'].getmaxyx()
         boxCrY, boxCrX = self.boxes['channel'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX +boxSzX, "|", boxSzY)
-        # box users
         boxSzY, boxSzX = self.boxes['user'].getmaxyx()
         boxCrY, boxCrX = self.boxes['user'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX -1, "|", boxSzY)
-        # box chatHeader
         boxSzY, boxSzX = self.boxes['chathead'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chathead'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
         self.stdscr.hline(boxCrY +boxSzY, boxCrX, "-", boxSzX)
-        # box chatbuffer
         boxSzY, boxSzX = self.boxes['chatbody'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chatbody'].getparyx()
-        # box message
         boxSzY, boxSzX = self.boxes['chatline'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chatline'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
