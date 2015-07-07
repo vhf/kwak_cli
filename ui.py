@@ -25,7 +25,6 @@ class ChatUI:
             self.boxes[key] = stdscr.derwin(*self.coordsBox[key])
         self.redraw_ui()
 
-
     def resize(self):
         padd_ui = 1
         padd_lt = 2
@@ -69,39 +68,34 @@ class ChatUI:
     def redraw_ui(self):
         """Redraws the entire UI"""
         termY, termX = self.stdscr.getmaxyx()
-        self.stdscr.clear()
-        # box chans
+        self.stdscr.erase()
         boxSzY, boxSzX = self.boxes['channel'].getmaxyx()
         boxCrY, boxCrX = self.boxes['channel'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX +boxSzX, "|", boxSzY)
-        # box users
         boxSzY, boxSzX = self.boxes['user'].getmaxyx()
         boxCrY, boxCrX = self.boxes['user'].getparyx()
         self.stdscr.vline( boxCrY, boxCrX -1, "|", boxSzY)
-        # box chatHeader
         boxSzY, boxSzX = self.boxes['chathead'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chathead'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
         self.stdscr.hline(boxCrY +boxSzY, boxCrX, "-", boxSzX)
-        # box chatbuffer
         boxSzY, boxSzX = self.boxes['chatbody'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chatbody'].getparyx()
-        # box message
         boxSzY, boxSzX = self.boxes['chatline'].getmaxyx()
         boxCrY, boxCrX = self.boxes['chatline'].getparyx()
         self.stdscr.hline(boxCrY -1, boxCrX, "-", boxSzX)
 
         self.stdscr.refresh()
 
-        self.redraw_userlist()
-        self.redraw_chanlist()
+        self.redraw_list('channel', self.chanlist, " #")
+        self.redraw_list('user', self.userlist)
         self.redraw_chathead()
         self.redraw_chatbuffer()
         self.redraw_chatline()
 
     def redraw_chathead(self, channel=None):
         """Redraw the userlist"""
-        self.boxes['chathead'].clear()
+        self.boxes['chathead'].erase()
         h, w = self.boxes['chathead'].getmaxyx()
         i = 1
         if (channel == None and self.current_channel == None):
@@ -114,39 +108,28 @@ class ChatUI:
         self.boxes['chathead'].addstr(0, w -(6 +1), "[HIDE]")
         self.boxes['chathead'].refresh()
 
-    def redraw_chanlist(self):
-        """Redraw the userlist"""
-        self.boxes['channel'].clear()
-        h, w = self.boxes['channel'].getmaxyx()
-        for i, name in enumerate(self.chanlist):
+    def redraw_list(self, winame, data, prfx=" "):
+        self.boxes[winame].erase()
+        h, w = self.boxes[winame].getmaxyx()
+        for i, name in enumerate(data):
             if i >= h:
                 break
-            self.boxes['channel'].addstr(i, 0, " #" + name)
-        self.boxes['channel'].refresh()
+            self.boxes[winame].addstr(i, 0, str(prfx)+name)
+        self.boxes[winame].refresh()
 
     def redraw_chatline(self):
         """Redraw the user input textbox"""
         h, w = self.boxes['chatline'].getmaxyx()
-        self.boxes['chatline'].clear()
+        self.boxes['chatline'].erase()
         start = len(self.inputbuffer) - w + 1
         if start < 0:
             start = 0
         self.boxes['chatline'].addstr(0, 0, self.inputbuffer[start:])
         self.boxes['chatline'].refresh()
 
-    def redraw_userlist(self):
-        """Redraw the userlist"""
-        self.boxes['user'].clear()
-        h, w = self.boxes['user'].getmaxyx()
-        for i, name in enumerate(self.userlist):
-            if i >= h:
-                break
-            self.boxes['user'].addstr(i, 1, name[:w - 1])
-        self.boxes['user'].refresh()
-
     def redraw_chatbuffer(self):
         """Redraw the chat message buffer"""
-        self.boxes['chatbody'].clear()
+        self.boxes['chatbody'].erase()
         h, w = self.boxes['chatbody'].getmaxyx()
         j = len(self.linebuffer) - h
         if j < 0:
@@ -219,6 +202,8 @@ class ChatUI:
             self.redraw_chatline()
 
     def print_logo(self):
+        if (self.coordsBox['chatbody'][1] < 65):
+            return 1
         self.chatbuffer_add('                                                               ')
         self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
         self.chatbuffer_add('                    .................,,,,,,,,,,,,,,,,,')
@@ -255,3 +240,4 @@ class ChatUI:
         self.chatbuffer_add('               +++++++++++++++++++++++++                      ')
         self.chatbuffer_add('                  +++++++++++++++++++                         ')
         self.chatbuffer_add('                       ++++++++                               ')
+        self.chatbuffer_add('                                                              ')

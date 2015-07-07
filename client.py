@@ -21,12 +21,24 @@ class Client:
         self.hot_channels = []
         self.hot_channels_name = []
         self.all_channels_name = []
-        self.current_channel = 'main'
+        self.current_channel = 'dev'
         self.client.call('getHotChannels', [], self.set_hot_channels_name)
         self.client.call('channelList', [], self.set_all_channels_name)
 
         self.client.on('connected', self.connected)
         self.client.on('added', self.added)
+
+        """ Not usable right now """
+        """self.client.update('users', {'username': self.username},
+                           {'profile.chans': self.current_channel}, callback=self.update_callback)
+        """
+
+    """
+    def update_callback(self, error, result):
+        self.ui.chatbuffer_add("UPDATED !")
+        self.ui.chatbuffer_add(str(error))
+        self.ui.chatbuffer_add(str(result))
+    """
 
     def set_hot_channels_name(self, error, result):
         if error:
@@ -34,7 +46,7 @@ class Client:
             return
         self.hot_channels_name = result
         self.ui.chanlist = self.hot_channels_name
-        self.ui.redraw_chanlist()
+        self.ui.redraw_ui()
 
     def set_all_channels_name(self, error, result):
         if error:
@@ -53,10 +65,9 @@ class Client:
         self.client.subscribe('messages', [self.current_channel])
 
     def subscribe_to_users(self, channel):
-        self.client.subscribe('users', [channel])
+        self.client.subscribe('users', [[channel]])
 
     def added(self, collection, id, fields):
-        self.client.call('setOnline', [])
         # only add new messages, not backlog
         if collection == 'messages' and fields['time'] > self.now:
             # fields : channel | time | text | user
@@ -68,7 +79,7 @@ class Client:
             # fields : username | profile | color
             if len(fields['profile']) and bool(fields['profile'].get('online', False)):
                 self.ui.userlist.append(fields['username'])
-                self.ui.redraw_userlist()
+                self.ui.redraw_ui()
 
     def connected(self):
         self.ui.chatbuffer_add('* CONNECTED')
