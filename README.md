@@ -1,3 +1,5 @@
+[![](https://img.shields.io/badge/kwak.io-join%20chat-green.svg?style=flat)](https://kwak.io/channel/kwak)
+
 kwak_cli
 =============
 
